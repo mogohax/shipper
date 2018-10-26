@@ -55,4 +55,12 @@ func main() {
 		log.Fatalf("could not create %v", err)
 	}
 	log.Printf("created %t", response.Created)
+
+	getAll, err := client.GetConsignments(context.Background(), &pb.GetRequest{})
+	if err != nil {
+		log.Fatalf("Could not list consignments: %v", err)
+	}
+	for _, v := range getAll.Consignments {
+		log.Println(v)
+	}
 }
