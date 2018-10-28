@@ -1,6 +1,6 @@
 FROM golang:1.9.0 as builder
 
-WORKDIR /go/src/github.com/mogohax/shippy/consignment-service
+WORKDIR /go/src/github.com/mogohax/shipper/consignment-service
 
 COPY . .
 
