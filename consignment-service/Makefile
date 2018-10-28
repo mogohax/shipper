@@ -1,7 +1,7 @@
 build:
 		protoc -I. --go_out=plugins=micro:$(GOPATH)/src/github.com/mogohax/shipper/consignment-service \
 				proto/consignment/consignment.proto
-		env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build
+#		env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build
 		docker build -t consignment-service .
 
 run:
