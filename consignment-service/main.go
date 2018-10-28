@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/micro/go-micro"
+	vesselProto "github.com/mogohax/shipper/vessel-service/proto/vessel"
 	pb "github.com/mogohax/shipper/consignment-service/proto/consignment"
 	"golang.org/x/net/context"
 )
@@ -34,9 +36,21 @@ func (repo *Repository) GetAll() []*pb.Consignment {
 // to give you a better idea.
 type service struct {
 	repo IRepository
+	vesselClient vesselProto.VesselServiceClient
 }
 
 func (s *service) CreateConsignment(ctx context.Context, req *pb.Consignment, res *pb.Response) error {
+	vesselResponse, err := s.vesselClient.FindAvailable(context.Background(), &vesselProto.Specification{
+		MaxWeight: req.Weight,
+		Capacity: int32(len(req.Containers)),
+	})
+	log.Printf("Found vessel: %s \n", vesselResponse.Vessel.Name)
+	if err != nil {
+		return err
+	}
+
+	req.VesselId = vesselResponse.Vessel.Id
+
 	consignment, err := s.repo.Create(req)
 
 	if err != nil {
@@ -63,9 +77,11 @@ func main() {
 		micro.Version("latest"),
 	)
 
+	vesselClient := vesselProto.NewVesselServiceClient("go.micro.srv.vessel", srv.Client())
+
 	srv.Init()
 
-	pb.RegisterShippingServiceHandler(srv.Server(), &service{repo})
+	pb.RegisterShippingServiceHandler(srv.Server(), &service{repo, vesselClient})
 
 	if err := srv.Run(); err != nil {
 		fmt.Println(err)
