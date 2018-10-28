@@ -4,49 +4,43 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
+	"os"
 
 	"github.com/micro/go-micro"
 	pb "github.com/mogohax/shipper/vessel-service/proto/vessel"
 )
 
-type IRepository interface {
-	FindAvailable(*pb.Specification) (*pb.Vessel, error)
-}
 
-type VesselRepository struct {
-	vessels []*pb.Vessel
-}
 
-func (repo *VesselRepository) FindAvailable(spec *pb.Specification) (*pb.Vessel, error) {
-	for _, vessel := range repo.vessels {
-		if spec.Capacity <= vessel.Capacity && spec.MaxWeight <= vessel.MaxWeight {
-			return vessel, nil
-		}
+const (
+	defaultHost = "localhost:27017"
+)
+
+func CreateDummyData(repo IRepository) {
+	defer repo.Close()
+
+	vessels := []*pb.Vessel{
+		{Id: "vessel001", Name: "Kane's Salty Secret", MaxWeight: 200000, Capacity: 500},
 	}
-	return nil, errors.New("no vessel found by that spec")
-}
-
-type service struct {
-	repo IRepository
-}
-
-func (s *service) FindAvailable(ctx context.Context, req *pb.Specification, res *pb.Response) error {
-	vessel, err := s.repo.FindAvailable(req)
-
-	if err != nil {
-		return err
-	}
-
-	res.Vessel = vessel
-	return nil
-}
+}1
 
 func main() {
-	vessels := []*pb.Vessel{
-		&pb.Vessel{Id: "vessel001", Name: "Boaty McBoatface", MaxWeight: 200000, Capacity: 500},
+	host := os.Getenv("DB_HOST")
+	if host == "" {
+		host = defaultHost
 	}
 
-	repo := &VesselRepository{vessels}
+	session, err := CreateSession(host)
+	defer session.Close()
+
+	if err != nil {
+		log.Fatalf("Error connecing to datastore '%s': %v", host, err)
+	}
+
+	repo := &VesselRepository{session.Copy()}
+
+	CreateDummyData(repo)
 
 	srv := micro.NewService(
 		micro.Name("go.micro.srv.vessel"),
@@ -55,7 +49,7 @@ func main() {
 
 	srv.Init()
 
-	pb.RegisterVesselServiceHandler(srv.Server(), &service{repo})
+	pb.RegisterVesselServiceHandler(srv.Server(), &service{session})
 
 	if err := srv.Run(); err != nil {
 		fmt.Println(err)
