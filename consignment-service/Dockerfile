@@ -8,7 +8,7 @@ RUN go get -u github.com/golang/dep/cmd/dep
 
 RUN dep ensure
 
-RUN CGO_ENABLED=0 GOS=linux go build -a -installsuffix cgo .
+RUN CGO_ENABLED=0 GOS=linux go build -a -installsuffix cgo main.go repository.go handler.go datastore.go
 
 #
 #   Build end

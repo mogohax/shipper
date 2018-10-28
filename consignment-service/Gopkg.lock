@@ -233,6 +233,20 @@
   pruneopts = "UT"
   revision = "95b1ffbd15a57cc5abb3f04402b9e8ec0016a52c"
 
+[[projects]]
+  branch = "v2"
+  digest = "1:988de7520a09024d5d94cd99bd545afbf194893994ec759b1cda0a0bbb6adb80"
+  name = "gopkg.in/mgo.v2"
+  packages = [
+    ".",
+    "bson",
+    "internal/json",
+    "internal/sasl",
+    "internal/scram",
+  ]
+  pruneopts = "UT"
+  revision = "9856a29383ce1c59f308dd1cf0363a79b5bef6b5"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
@@ -243,6 +257,7 @@
     "github.com/micro/go-micro/server",
     "github.com/mogohax/shipper/vessel-service/proto/vessel",
     "golang.org/x/net/context",
+    "gopkg.in/mgo.v2",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
