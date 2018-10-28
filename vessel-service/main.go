@@ -1,8 +1,6 @@
 package main
 
 import (
-	"context"
-	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -10,8 +8,6 @@ import (
 	"github.com/micro/go-micro"
 	pb "github.com/mogohax/shipper/vessel-service/proto/vessel"
 )
-
-
 
 const (
 	defaultHost = "localhost:27017"
@@ -23,7 +19,11 @@ func CreateDummyData(repo IRepository) {
 	vessels := []*pb.Vessel{
 		{Id: "vessel001", Name: "Kane's Salty Secret", MaxWeight: 200000, Capacity: 500},
 	}
-}1
+
+	for _,v := range vessels {
+		repo.Create(v)
+	}
+}
 
 func main() {
 	host := os.Getenv("DB_HOST")
