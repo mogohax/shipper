@@ -6,9 +6,8 @@ import (
 	"os"
 
 	"github.com/micro/go-micro"
-	vesselProto "github.com/mogohax/shipper/vessel-service/proto/vessel"
 	pb "github.com/mogohax/shipper/consignment-service/proto/consignment"
-	"golang.org/x/net/context"
+	vesselProto "github.com/mogohax/shipper/vessel-service/proto/vessel"
 )
 
 const (
