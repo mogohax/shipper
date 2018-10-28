@@ -1,4 +1,4 @@
-FROM golang:1.9.0 as builder
+FROM golang:1.10.4 as builder
 
 WORKDIR /go/src/github.com/mogohax/shipper/consignment-service
 
@@ -19,6 +19,6 @@ FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 
 WORKDIR /app
-COPY --from=builder /go/src/github.com/mogohax/shippy/consignment-service/consignment-service .
+COPY --from=builder /go/src/github.com/mogohax/shipper/consignment-service/consignment-service .
 
 CMD ["./consignment-service"]
