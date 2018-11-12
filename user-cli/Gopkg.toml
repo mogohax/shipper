@@ -26,10 +26,6 @@
 
 
 [[constraint]]
-  branch = "master"
-  name = "github.com/micro/cli"
-
-[[constraint]]
   name = "github.com/micro/go-micro"
   version = "0.12.0"
 

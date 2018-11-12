@@ -9,6 +9,14 @@
   revision = "3df31a1ada83e310c2e24b267c8e8b68836547b4"
 
 [[projects]]
+  digest = "1:76dc72490af7174349349838f2fe118996381b31ea83243812a97e5a0fd5ed55"
+  name = "github.com/dgrijalva/jwt-go"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
+  version = "v3.2.0"
+
+[[projects]]
   digest = "1:4be5d1a52c61b74c0a4d62f37c0640f706ae6e07eb73617dd013990d565717d5"
   name = "github.com/go-log/log"
   packages = [
@@ -232,9 +240,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:d5891c5bca9c62e5d394ca26491d2b710a1dc08cedeb0ca8f9ac4c3305120b02"
+  digest = "1:0199120c0958f5c74a2adfb040fd1554156d39df8068e7695e6654e507d08dc5"
   name = "golang.org/x/crypto"
   packages = [
+    "bcrypt",
+    "blowfish",
     "ed25519",
     "ed25519/internal/edwards25519",
   ]
@@ -268,6 +278,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/dgrijalva/jwt-go",
     "github.com/golang/protobuf/proto",
     "github.com/jinzhu/gorm",
     "github.com/jinzhu/gorm/dialects/postgres",
@@ -275,6 +286,7 @@
     "github.com/micro/go-micro/client",
     "github.com/micro/go-micro/server",
     "github.com/satori/go.uuid",
+    "golang.org/x/crypto/bcrypt",
     "golang.org/x/net/context",
   ]
   solver-name = "gps-cdcl"
